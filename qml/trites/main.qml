@@ -52,7 +52,10 @@ PageStackWindow {
         MouseArea {
             id: gameControler
             enabled: gameTimer.running
-            anchors.fill: parent
+            x:0
+            y:0
+            width:480
+            height:710
 
             onPressed: Game.mousePressed(mouse)
             onReleased: Game.mouseReleased()
@@ -296,7 +299,7 @@ PageStackWindow {
         Item {
             id: gameContainer
             x: 0
-            y: 130
+            y: 0
             width: 480
             height: 724
             visible: true
@@ -304,7 +307,7 @@ PageStackWindow {
             Text {
                 id: scoreText;
                 x: 362
-                y: 254
+                y: 266
                 width: 113
                 height: 66
                 color: "white"
@@ -319,7 +322,7 @@ PageStackWindow {
             Text {
                 id: nextText;
                 x: 362
-                y: 16
+                y: 28
                 width: 113
                 height: 33
                 color: "white"
@@ -334,7 +337,7 @@ PageStackWindow {
             Item {
                 id: nextPiecePlaceholder
                 x: 379
-                y: 56
+                y: 68
                 width: 96
                 height: 108
             }
@@ -342,7 +345,7 @@ PageStackWindow {
             Text {
                 id: levelText;
                 x: 362
-                y: 169
+                y: 181
                 width: 113
                 height: 66
                 color: "white"
@@ -358,7 +361,7 @@ PageStackWindow {
                 id: gameArea
                 source: "data/background.png"
                 x: 25
-                y: 16
+                y: 4
                 width: 347
                 height: 693
                 clip: true
@@ -367,7 +370,7 @@ PageStackWindow {
             Image {
                 id: pauseButton
                 x: 397
-                y: 632
+                y: 600
                 width: 60
                 height: 60
                 source: pauseButtonArea.pressed ? "data/pausebutton_pressed.svg" : "data/pausebutton_unpressed.svg"
@@ -379,6 +382,70 @@ PageStackWindow {
                         root.state = "pauseMenuState";
                         gameTimer.running = false;
                     }
+                }
+            }
+
+            Image {
+                id: leftButton
+                x: 30
+                y: 720
+                width: 80
+                height: 80
+                sourceSize.width: 80
+                source: leftButtonArea.pressed ? "data/leftbutton_pressed.svg" : "data/leftbutton_unpressed.svg"
+
+                MouseArea {
+                    id: leftButtonArea
+                    anchors.fill: parent
+                    onClicked:  Game.movePiece(-1);
+                }
+            }
+
+            Image {
+                id: rotateButton
+                x: 150
+                y: 720
+                width: 80
+                height: 80
+                sourceSize.width: 80
+                source: rotateButtonArea.pressed ? "data/rotatebutton_pressed.svg" : "data/rotatebutton_unpressed.svg"
+
+                MouseArea {
+                    id: rotateButtonArea
+                    anchors.fill: parent
+                    onClicked: Game.rotatePiece();
+                }
+            }
+
+            Image {
+                id: downButton
+                x: 270
+                y: 720
+                width: 80
+                height: 80
+                sourceSize.width: 80
+                source: downButtonArea.pressed ? "data/downbutton_pressed.svg" : "data/downbutton_unpressed.svg"
+
+                MouseArea {
+                    id: downButtonArea
+                    anchors.fill: parent
+                    onClicked: Game.updateGame();
+                }
+            }
+
+            Image {
+                id: rightButton
+                x: 390
+                y: 720
+                width: 80
+                height: 80
+                sourceSize.width: 80
+                source: rightButtonArea.pressed ? "data/rightbutton_pressed.svg" : "data/rightbutton_unpressed.svg"
+
+                MouseArea {
+                    id: rightButtonArea
+                    anchors.fill: parent
+                    onClicked: Game.movePiece(1);
                 }
             }
 
@@ -628,10 +695,10 @@ PageStackWindow {
 
                 PropertyChanges {
                     target: image1
-                    x: 53
-                    y: 13
-                    width: 374
-                    height: 104
+                    x: 390
+                    y: 0
+                    width: 80
+                    height: 24
                     fillMode: "PreserveAspectFit"
                     z: 5
                 }
@@ -659,6 +726,15 @@ PageStackWindow {
             },
             State {
                 name: "pauseMenuState"
+                PropertyChanges {
+                    target: image1
+                    x: 53
+                    y: 13
+                    width: 374
+                    height: 104
+                    z: 5
+                }
+
                 PropertyChanges {
                     target: menuContainer
                     visible: true
@@ -754,13 +830,13 @@ PageStackWindow {
             Transition {
                 from: "gameState"
                 to: "pauseMenuState"
-                NumberAnimation { properties: "opacity"; easing.type: Easing.InOutQuad; duration: 250 }
+                NumberAnimation { properties: "x, y, width, height, opacity"; easing.type: Easing.InOutQuad; duration: 250 }
             },
             Transition {
                 from: "pauseMenuState"
                 to: "gameState"
                 SequentialAnimation {
-                    NumberAnimation { properties: "opacity"; easing.type: Easing.InOutQuad; duration: 250 }
+                    NumberAnimation { properties: "x, y, width, height, opacity"; easing.type: Easing.InOutQuad; duration: 250 }
                     ScriptAction { script: gameTimer.running = true; }
                 }
             },
