@@ -461,8 +461,10 @@ PageStackWindow {
                     anchors.fill: parent
                     onPressed: {
                         Game.updateGame();
-                        Game.savedInterval = gameTimer.interval;
-                        gameTimer.interval = 100;
+                        if (gameTimer.interval > 100) {
+                            Game.savedInterval = gameTimer.interval;
+                            gameTimer.interval = 100;
+                        }
                     }
                     onReleased: {
                         if (Game.savedInterval) {
