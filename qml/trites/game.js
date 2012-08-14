@@ -40,6 +40,9 @@ var seconds = 0;
 var minutes = 0;
 /* TODO? Hours, days, weeks? */
 
+/* Contains last saved interval for gameTimer */
+var savedInterval;
+
 /* Define different types of collisions */
 var Collision = {
     None: 0,
@@ -55,6 +58,11 @@ function index(x, y) {
 /* Create new random piece and add it to the game */
 function newPiece() {
     bagIndex++;
+
+    if (savedInterval) {
+        gameTimer.interval = savedInterval - (100 - gameTimer.interval);
+        savedInterval = false;
+    }
 
     var randomFile = pieceBag[bagIndex];
     var component = Qt.createComponent(randomFile);
@@ -103,6 +111,7 @@ function startGame() {
     blockSize = gameArea.height / boardHeight;
     console.log("block:", blockSize);
 
+    savedInterval = false;
     score = 0;
     level = 1;
     goal = 10;

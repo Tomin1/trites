@@ -394,11 +394,26 @@ PageStackWindow {
                 sourceSize.width: 80
                 source: leftButtonArea.pressed ? "data/leftbutton_pressed.svg" : "data/leftbutton_unpressed.svg"
 
+                signal repeatedClick();
                 MouseArea {
                     id: leftButtonArea
                     anchors.fill: parent
-                    onClicked:  Game.movePiece(-1);
+                    onPressed: {
+                        Game.movePiece(-1);
+                        timerLeftButton.running = true;
+                    }
+                    onReleased: timerLeftButton.running = false;
                 }
+
+                Timer {
+                    id: timerLeftButton
+                    interval: 200
+                    running: false
+                    repeat: true
+                    onTriggered: leftButton.repeatedClick();
+                }
+
+                onRepeatedClick: Game.movePiece(-1);
             }
 
             Image {
@@ -410,11 +425,26 @@ PageStackWindow {
                 sourceSize.width: 80
                 source: rotateButtonArea.pressed ? "data/rotatebutton_pressed.svg" : "data/rotatebutton_unpressed.svg"
 
+                signal repeatedClick();
                 MouseArea {
                     id: rotateButtonArea
                     anchors.fill: parent
-                    onClicked: Game.rotatePiece();
+                    onPressed: {
+                        Game.rotatePiece();
+                        timerRotateButton.running = true;
+                    }
+                    onReleased: timerRotateButton.running = false;
                 }
+
+                Timer {
+                    id: timerRotateButton
+                    interval: 400
+                    running: false
+                    repeat: true
+                    onTriggered: rotateButton.repeatedClick();
+                }
+
+                onRepeatedClick: Game.rotatePiece();
             }
 
             Image {
@@ -429,7 +459,17 @@ PageStackWindow {
                 MouseArea {
                     id: downButtonArea
                     anchors.fill: parent
-                    onClicked: Game.updateGame();
+                    onPressed: {
+                        Game.updateGame();
+                        Game.savedInterval = gameTimer.interval;
+                        gameTimer.interval = 100;
+                    }
+                    onReleased: {
+                        if (Game.savedInterval) {
+                            gameTimer.interval = Game.savedInterval - (100 - gameTimer.interval);
+                            Game.savedInterval = false;
+                        }
+                    }
                 }
             }
 
@@ -442,11 +482,26 @@ PageStackWindow {
                 sourceSize.width: 80
                 source: rightButtonArea.pressed ? "data/rightbutton_pressed.svg" : "data/rightbutton_unpressed.svg"
 
+                signal repeatedClick();
                 MouseArea {
                     id: rightButtonArea
                     anchors.fill: parent
-                    onClicked: Game.movePiece(1);
+                    onPressed: {
+                        Game.movePiece(1);
+                        timerRightButton.running = true;
+                    }
+                    onReleased: timerRightButton.running = false;
                 }
+
+                Timer {
+                    id: timerRightButton
+                    interval: 200
+                    running: false
+                    repeat: true
+                    onTriggered: rightButton.repeatedClick();
+                }
+
+                onRepeatedClick: Game.movePiece(1);
             }
 
             Timer {
