@@ -1,6 +1,7 @@
 /* 
     This file is part of Trites.
-	Copyright (C) 2011 odamite <odamite@gmail.com>
+    Copyright (C) 2011 odamite <odamite@gmail.com>
+    Copyright (C) 2024 tomin <code@tomin.site>
 
     Trites is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,11 +17,12 @@
     along with Trites.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 1.0
+import Sailfish.Silica 1.0
+import QtQuick 2.6
 
 Image {
-    width: 288
-    height: 60
+    width: window.scaledValue(288)
+    height: window.scaledValue(60)
     source: mousearea.pressed ? "data/menubutton_pressed.svg" : "data/menubutton_unpressed.svg"
 
     property bool bPressed: false
@@ -30,7 +32,7 @@ Image {
     Text {
         anchors.fill: parent
         text: parent.label
-        font.pointSize: 24
+        font.pixelSize: window.scaledValue(24) * 1.5
         color: "white"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

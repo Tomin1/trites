@@ -1,6 +1,7 @@
 /* 
     This file is part of Trites.
-	Copyright (C) 2011 odamite <odamite@gmail.com>
+    Copyright (C) 2011 odamite <odamite@gmail.com>
+    Copyright (C) 2024 tomin <code@tomin.site>
 
     Trites is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,7 +60,7 @@ function newPiece() {
     var randomFile = pieceBag[bagIndex];
     var component = Qt.createComponent(randomFile);
 
-    if (component.status == Component.Ready) {
+    if (component.status === Component.Ready) {
         currentPiece = component.createObject(gameArea);
         currentPiece.blockSize = blockSize;
         currentPiece.pX = currentPiece.startX;
@@ -68,7 +69,7 @@ function newPiece() {
         currentPiece.animLength = gameTimer.interval * 0.75;
 
         var col = checkCollision(currentPiece.pX, currentPiece.pY, currentPiece.pRot);
-        if (col == Collision.Block) {
+        if (col === Collision.Block) {
             root.state = "hiscoresEnd";
             textFinalScore.text = score;
             rectangle2.x = 0;
@@ -89,10 +90,10 @@ function newPiece() {
     randomFile = pieceBag[bagIndex+1];
     component = Qt.createComponent(randomFile);
 
-    if (component.status == Component.Ready) {
+    if (component.status === Component.Ready) {
         nextPiece = component.createObject(nextPiecePlaceholder);
-        nextPiece.blockSize = 24;
-        if (nextPiece.startY == 0) {
+        nextPiece.blockSize = window.scaledValue(24);
+        if (nextPiece.startY === 0) {
             nextPiece.pY = 1;
         }
         nextPiece.anchors.right = nextPiecePlaceholder.right;
@@ -113,8 +114,10 @@ function startGame() {
 
     /* Destroy old content of the game board */
     for (var i = 0; i < maxIndex; i++) {
-        if (board[i] != null)
+        if (board[i]) {
             board[i].destroy();
+            board[i] = null;
+        }
     }
 
     /* Initialize game board */
@@ -146,7 +149,7 @@ function startGame() {
 function checkCollision(newX, newY, newRot) {
     for (var y = 0; y < currentPiece.pSize; y++) {
         for (var x = 0; x < currentPiece.pSize; x++) {
-            if (currentPiece.collision[newRot].charAt(x + y * currentPiece.pSize) == "1") {
+            if (currentPiece.collision[newRot].charAt(x + y * currentPiece.pSize) === "1") {
                 if (newX + x < 0) {
                     return Collision.Side;
                 }
@@ -156,7 +159,7 @@ function checkCollision(newX, newY, newRot) {
                 else if (newY + y >= boardHeight) {
                     return Collision.Block;
                 }
-                else if (board[index(newX + x, newY + y)] != null) {
+                else if (board[index(newX + x, newY + y)] !== null) {
                     return Collision.Block;
                 }
             }
@@ -175,13 +178,13 @@ function updateGame() {
     /* If piece collides bottom or another block:
        Save the piece to array, create a new piece and
        check have the player filled some row(s). */
-    if (col == Collision.Block) {
+    if (col === Collision.Block) {
         savePiece();
         currentPiece.destroy();
         newPiece();
         checkFullRows();
     }
-    else if (col == Collision.None) /* If now just move piece down */
+    else if (col === Collision.None) /* If now just move piece down */
         currentPiece.pY++;
 
     /* Checking side collisions here isn't necessary because it's just
@@ -205,14 +208,14 @@ function rotatePiece() {
         tmpRot = maxValue;
 
     /* Do rotation if nothing is blocking it */
-    if (checkCollision(currentPiece.pX, currentPiece.pY, tmpRot) == Collision.None) {
+    if (checkCollision(currentPiece.pX, currentPiece.pY, tmpRot) === Collision.None) {
         currentPiece.pRot = tmpRot;
 
         /* Do 360 rotation for normal pieces */
         if (!currentPiece.twoRotation)
             currentPiece.pRotReal--;
         else /* Rotate back and forward pieces with 2 rotation states */
-            if (tmpRot == 0)
+            if (tmpRot === 0)
                 currentPiece.pRotReal++;
             else
                 currentPiece.pRotReal--;
@@ -221,7 +224,7 @@ function rotatePiece() {
 
 /* Move piece left or right if walls aren't blocking */
 function movePiece(dir) {
-    if (checkCollision(currentPiece.pX + dir, currentPiece.pY, currentPiece.pRot) == Collision.None)
+    if (checkCollision(currentPiece.pX + dir, currentPiece.pY, currentPiece.pRot) === Collision.None)
         currentPiece.pX += dir;
 }
 
@@ -229,7 +232,7 @@ function movePiece(dir) {
 function savePiece() {
     for (var y = 0; y < currentPiece.pSize; y++) {
         for (var x = 0; x < currentPiece.pSize; x++) {
-            if (currentPiece.collision[currentPiece.pRot].charAt(x + y * currentPiece.pSize) == "1") {
+            if (currentPiece.collision[currentPiece.pRot].charAt(x + y * currentPiece.pSize) === "1") {
                 var b = componentBlock.createObject(gameArea);
                 b.blockSize = blockSize;
                 b.x = (currentPiece.pX + x) * blockSize;
@@ -268,14 +271,14 @@ function removeRow(row) {
 /* Check is there full rows and delete them
    TODO: Make faster by search full rows just from 4 rows? */
 function checkFullRows() {
-    var removeRows = new Array();
+    var removeRows = new Array;
 
     /* Go thought the game board row by row and search for full rows */
     for (var row = 0; row < boardHeight; row++) {
         for (var column = 0; column < boardWidth; column++) {
             /* Row can't be full if there are one empty column on row.
                If one is found skip to next row. */
-            if (board[index(column, row)] == null)
+            if (board[index(column, row)] === null)
                 break;
         }
         /* Row is full if all it's columns are blocks.

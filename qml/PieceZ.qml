@@ -16,7 +16,7 @@
     along with Trites.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 1.1
+import QtQuick 2.6
 import "game.js" as Game
 
 /* The Z piece:

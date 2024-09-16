@@ -16,7 +16,7 @@
     along with Trites.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 1.1
+import QtQuick 2.6
 
 /* This is base for all different pieces.
    It adds common properties and animations

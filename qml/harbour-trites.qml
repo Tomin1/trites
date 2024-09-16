@@ -1,6 +1,7 @@
 /* 
     This file is part of Trites.
-	Copyright (C) 2011 odamite <odamite@gmail.com>
+    Copyright (C) 2011 odamite <odamite@gmail.com>
+    Copyright (C) 2024 tomin <code@tomin.site>
 
     Trites is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,22 +17,29 @@
     along with Trites.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import Sailfish.Silica 1.0
+import QtQuick 2.6
 import "game.js" as Game
 
 /* This is the over long main file... */
 
-PageStackWindow {
-    id: window;
-    showStatusBar: false
-    initialPage: root
+ApplicationWindow {
+    readonly property real scalingFactor: Math.min(Screen.width / 480, Screen.height / 854)
 
-    Page {
+    function scaledValue(value) {
+        return value * scalingFactor
+    }
+
+    function scaledByHeight(value) {
+        return value * Screen.height / 854;
+    }
+
+    id: window
+    initialPage: Page { // NB: Cannot use Component here
         id: root
         state: "introState"
 
-        orientationLock: PageOrientation.LockPortrait
+        allowedOrientations: Orientation.Portrait
 
         Rectangle {
             id: rectangle1
@@ -40,10 +48,11 @@ PageStackWindow {
         }
 
         Connections {
-            target: platformWindow
-            onActiveChanged: {
-                if (!platformWindow.active && root.state == "gameState") {
-                    gameTimer.running = false;
+            target: Qt.application
+
+            onStateChanged: {
+                if (Qt.application.state !== Qt.ApplicationActive && root.state == "gameState") {
+                    gameTimer.running = false
                     root.state = "pauseMenuState"
                 }
             }
@@ -60,35 +69,35 @@ PageStackWindow {
         }
 
         Keys.onPressed: {
-            if (event.key == Qt.Key_Up) {
-                Game.rotatePiece();
+            if (event.key === Qt.Key_Up) {
+                Game.rotatePiece()
             }
-            else if (event.key == Qt.Key_Left) {
-                Game.movePiece(-1);
+            else if (event.key === Qt.Key_Left) {
+                Game.movePiece(-1)
             }
-            else if (event.key == Qt.Key_Right) {
-                Game.movePiece(1);
+            else if (event.key === Qt.Key_Right) {
+                Game.movePiece(1)
             }
-            else if (event.key == Qt.Key_Down) {
-                Game.updateGame();
+            else if (event.key === Qt.Key_Down) {
+                Game.updateGame()
             }
         }
 
         MouseArea {
             id: mousearea1
-            x: 72
-            y: 13
+            x: scaledValue(72)
+            y: scaledValue(13)
             anchors.fill: parent
             enabled: false
-            onClicked: root.state = "menuState";
+            onClicked: root.state = "menuState"
         }
 
         Item {
             id: helpContainer
-            x: 480
-            y: 130
-            width: 480
-            height: 724
+            x: Screen.width
+            y: scaledValue(130)
+            width: Screen.width
+            height: scaledByHeight(724)
             z: 10
 
             Rectangle {
@@ -97,17 +106,17 @@ PageStackWindow {
                 opacity: 0.75
             }
 
-            Flickable {
+            SilicaFlickable {
                 id: flickHelp
-                width: 416
-                height: 563
+                width: scaledValue(416)
+                height: scaledByHeight(563)
                 contentHeight: helpText.paintedHeight
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: scaledValue(32)
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: scaledValue(32)
                 anchors.top: parent.top
-                anchors.topMargin: 32
+                anchors.topMargin: scaledByHeight(32)
                 clip: true
 
                 Label {
@@ -117,19 +126,20 @@ PageStackWindow {
                     text: qsTr("Original consept by Alexey Pajitnov\n\nTrites is a game developed by odamite. Graphics designed by joppu\n\nTrites is open source and licenced under GPL version 3.\n\nGame data licenced under CC BY-SA.")
                     wrapMode: Text.WordWrap
                 }
+
+                VerticalScrollDecorator {}
             }
-            ScrollDecorator { flickableItem: flickHelp }
 
             Item {
                 id: highScoreText
-                width: 416
-                height: 563
+                width: scaledValue(416)
+                height: scaledByHeight(563)
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: scaledValue(32)
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: scaledValue(32)
                 anchors.top: parent.top
-                anchors.topMargin: 32
+                anchors.topMargin: scaledValue(32)
 
                 ListView {
                     anchors.fill: parent
@@ -147,7 +157,7 @@ PageStackWindow {
                     id: noHighYet
                     anchors.fill: parent
                     text: "No highscores yet"
-                    font.pointSize: 32
+                    font.pixelSize: scaledValue(32) * 1.5
                     visible: false
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -164,12 +174,12 @@ PageStackWindow {
             }
 
             MenuButton {
-                x: 96
-                y: 628
+                x: scaledValue(96)
+                y: scaledValue(628)
                 label: "Back"
                 onClicked: {
-                    helpContainer.x = 480;
-                    menuContainer.x = 0;
+                    helpContainer.x = Screen.width
+                    menuContainer.x = 0
                 }
             }
 
@@ -182,11 +192,11 @@ PageStackWindow {
 
         Image {
             id: image1
-            x: 53
-            y: 13
-            width: 374
-            height: 104
-            sourceSize.width: 512
+            x: scaledValue(53)
+            y: scaledValue(13)
+            width: scaledValue(374)
+            height: scaledValue(104)
+            sourceSize.width: scaledValue(374)
             fillMode: Image.PreserveAspectFit
             smooth: true
             source: "data/logo.svg"
@@ -198,16 +208,16 @@ PageStackWindow {
                 NumberAnimation { target: author; property: "opacity"; from: 0.0; to: 1.0; duration: 1000 }
                 ScriptAction { script: mousearea1.enabled = true }
                 PauseAnimation { duration: 5000 }
-                onCompleted: root.state = "menuState"
+                PropertyAction { target: root; property: "state"; value: "menuState" }
             }
 
             Image {
                 source: "data/author.svg"
                 id: author
                 x: 0
-                y: 489
-                width: 446
-                height: 74
+                y: scaledValue(489)
+                width: scaledValue(446)
+                height: scaledValue(74)
                 opacity: 1
                 fillMode: "PreserveAspectFit"
             }
@@ -215,9 +225,9 @@ PageStackWindow {
 
         Item {
             id: menuContainer
-            y: 130
-            width: 480
-            height: 724
+            y: scaledValue(130)
+            width: Screen.width
+            height: scaledValue(724)
             visible: true
             z: 1
 
@@ -230,59 +240,59 @@ PageStackWindow {
 
             MenuButton {
                 id: buttonStartGame
-                x: 96
-                y: 854
+                x: scaledValue(96)
+                y: Screen.height
                 label: "Start game"
                 onClicked: {
-                    stupidAnimation.stop();
-                    root.state = "gameState";
+                    stupidAnimation.stop()
+                    root.state = "gameState"
                 }
             }
 
             MenuButton {
                 id: buttonRestart
-                x: 96
-                y: 854
+                x: scaledValue(96)
+                y: Screen.height
                 label: "Restart"
                 onClicked: {
-                    Game.startGame();
-                    gameTimer.running = false;
-                    root.state = "gameState";
+                    Game.startGame()
+                    gameTimer.running = false
+                    root.state = "gameState"
                 }
             }
 
             MenuButton {
                 id: buttonResume
-                x: 96
-                y: 854
+                x: scaledValue(96)
+                y: Screen.height
                 label: "Resume"
                 onClicked: root.state = "gameState"
             }
 
             MenuButton {
                 id: buttonHighscores
-                x: 96
-                y: 854
+                x: scaledValue(96)
+                y: Screen.height
                 label: "Highscores"
                 onClicked: {
-                    Game.showHighScores();
-                    helpContainer.x = 0;
-                    menuContainer.x = -480
-                    helpText.visible = false;
-                    highScoreText.visible = true;
+                    Game.showHighScores()
+                    helpContainer.x = 0
+                    menuContainer.x = -Screen.width
+                    helpText.visible = false
+                    highScoreText.visible = true
                 }
             }
 
             MenuButton {
                 id: buttonHelp
-                x: 96
-                y: 854
+                x: scaledValue(96)
+                y: Screen.height
                 label: "Help"
                 onClicked: {
-                    helpContainer.x = 0;
-                    menuContainer.x = -480
-                    helpText.visible = true;
-                    highScoreText.visible = false;
+                    helpContainer.x = 0
+                    menuContainer.x = -Screen.width
+                    helpText.visible = true
+                    highScoreText.visible = false
                 }
             }
 
@@ -296,20 +306,20 @@ PageStackWindow {
         Item {
             id: gameContainer
             x: 0
-            y: 130
-            width: 480
-            height: 724
+            y: scaledValue(130)
+            width: Screen.width
+            height: scaledValue(724)
             visible: true
 
             Text {
-                id: scoreText;
-                x: 362
-                y: 254
-                width: 113
-                height: 66
+                id: scoreText
+                x: scaledValue(362)
+                y: scaledValue(254)
+                width: scaledValue(113)
+                height: scaledValue(66)
                 color: "white"
                 text: "Score:\n0"
-                font.pointSize: 20
+                font.pixelSize: scaledValue(20) * 1.5
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignRight
@@ -317,14 +327,14 @@ PageStackWindow {
             }
 
             Text {
-                id: nextText;
-                x: 362
-                y: 16
-                width: 113
-                height: 33
+                id: nextText
+                x: scaledValue(362)
+                y: scaledValue(16)
+                width: scaledValue(113)
+                height: scaledValue(33)
                 color: "white"
                 text: "Next:"
-                font.pointSize: 20
+                font.pixelSize: scaledValue(20) * 1.5
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignRight
@@ -333,21 +343,21 @@ PageStackWindow {
 
             Item {
                 id: nextPiecePlaceholder
-                x: 379
-                y: 56
-                width: 96
-                height: 108
+                x: scaledValue(379)
+                y: scaledValue(56)
+                width: scaledValue(96)
+                height: scaledValue(108)
             }
 
             Text {
-                id: levelText;
-                x: 362
-                y: 169
-                width: 113
-                height: 66
+                id: levelText
+                x: scaledValue(362)
+                y: scaledValue(169)
+                width: scaledValue(113)
+                height: scaledValue(66)
                 color: "white"
                 text: "Level:\n1"
-                font.pointSize: 20
+                font.pixelSize: scaledValue(20) * 1.5
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignRight
@@ -357,27 +367,27 @@ PageStackWindow {
             Image {
                 id: gameArea
                 source: "data/background.png"
-                x: 25
-                y: 16
-                width: 347
-                height: 693
+                x: scaledValue(25)
+                y: scaledValue(16)
+                width: scaledValue(347)
+                height: scaledValue(693)
                 clip: true
             }
 
             Image {
                 id: pauseButton
-                x: 397
-                y: 632
-                width: 60
-                height: 60
+                x: scaledValue(397)
+                y: scaledValue(632)
+                width: scaledValue(60)
+                height: scaledValue(60)
                 source: pauseButtonArea.pressed ? "data/pausebutton_pressed.svg" : "data/pausebutton_unpressed.svg"
 
                 MouseArea {
                     id: pauseButtonArea
                     anchors.fill: parent
                     onClicked: {
-                        root.state = "pauseMenuState";
-                        gameTimer.running = false;
+                        root.state = "pauseMenuState"
+                        gameTimer.running = false
                     }
                 }
             }
@@ -394,9 +404,9 @@ PageStackWindow {
         Rectangle {
             id: rectangle2
             x: 0
-            y: 130
-            width: 480*2
-            height: 724
+            y: scaledValue(130)
+            width: Screen.width*2
+            height: scaledValue(724)
             //anchors.fill: parent
             color: "black"
             visible: false
@@ -407,63 +417,63 @@ PageStackWindow {
                 id: nameField
                 placeholderText: "Write your name here"
                 maximumLength: 50
-                y: 140
+                y: scaledValue(140)
                 anchors.right: parent.right
-                anchors.rightMargin: 480+25
+                anchors.rightMargin: Screen.width+scaledValue(25)
                 anchors.left: parent.left
-                anchors.leftMargin: 25
+                anchors.leftMargin: scaledValue(25)
             }
 
             MenuButton {
-                x: 95
-                y: 210
+                x: scaledValue(95)
+                y: scaledValue(210)
                 label: "Save my score"
-                onClicked: { Game.saveHighScore(); rectangle2.x = -480; }
+                onClicked: { Game.saveHighScore(); rectangle2.x = -Screen.width }
             }
 
             MenuButton {
-                x: 95
-                y: 290
+                x: scaledValue(95)
+                y: scaledValue(290)
                 label: "No, thank you"
-                onClicked: { Game.showHighScores(); rectangle2.x = -480; }
+                onClicked: { Game.showHighScores(); rectangle2.x = -Screen.width }
             }
 
             MenuButton {
-                x: 480 + 95
-                y: 636
+                x: Screen.width + scaledValue(95)
+                y: scaledValue(636)
                 label: "Go To Menu"
                 onClicked: {
-                    root.state = "menuState";
-                    author.visible = false;
+                    root.state = "menuState"
+                    author.visible = false
                 }
             }
 
             MenuButton {
-                x: 480 + 95
-                y: 544
+                x: Screen.width + scaledValue(95)
+                y: scaledValue(544)
                 label: "Play Again"
                 onClicked: {
-                    root.state = "gameState";
+                    root.state = "gameState"
                 }
             }
 
             Text {
                 id: text1
-                x: 53
-                y: 24
-                width: 371
-                height: 30
+                x: scaledValue(53)
+                y: scaledValue(24)
+                width: scaledValue(371)
+                height: scaledValue(30)
                 color: "white"
                 text: "Score:"
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: 24
+                font.pixelSize: scaledValue(24)
             }
 
             ListView {
-                x: 480+50
-                width: 480-100
-                height: 500
+                x: Screen.width+scaledValue(50)
+                width: Screen.width-scaledValue(100)
+                height: scaledValue(500)
                 clip: true
                 model: highScoreModel
                 delegate: Label {
@@ -475,7 +485,7 @@ PageStackWindow {
                     id: noHighYetEnd1
                     anchors.fill: parent
                     text: "No highscores yet"
-                    font.pointSize: 32
+                    font.pixelSize: scaledValue(32) * 1.5
                     visible: false
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -493,14 +503,14 @@ PageStackWindow {
 
             Text {
                 id: textFinalScore
-                x: 53
-                y: 61
-                width: 371
-                height: 59
+                x: scaledValue(53)
+                y: scaledValue(61)
+                width: scaledValue(371)
+                height: scaledValue(59)
                 color: "white"
                 text: "0"
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: 48
+                font.pixelSize: scaledValue(48)
             }
 
             Behavior on x {
@@ -528,19 +538,19 @@ PageStackWindow {
 
                 PropertyChanges {
                     target: image1
-                    x: 42
-                    y: 13
-                    width: 396
-                    height: 719
+                    x: scaledValue(42)
+                    y: scaledValue(13)
+                    width: scaledValue(396)
+                    height: scaledValue(719)
                     opacity: 1
                 }
 
                 PropertyChanges {
                     target: author
-                    x: 0
-                    y: 420
-                    width: 396
-                    height: 50
+                    x: scaledValue(0)
+                    y: scaledValue(420)
+                    width: scaledValue(396)
+                    height: scaledValue(50)
                     opacity: 0
                 }
 
@@ -555,45 +565,45 @@ PageStackWindow {
                 PropertyChanges {
                     target: menuContainer
                     x: 0
-                    y: 130
-                    width: 480
-                    height: 724
+                    y: scaledValue(130)
+                    width: Screen.width
+                    height: scaledValue(724)
                     visible: true
                     opacity: 1
                 }
 
                 PropertyChanges {
                     target: image1
-                    x: 53
-                    width: 374
-                    height: 104
+                    x: scaledValue(53)
+                    width: scaledValue(374)
+                    height: scaledValue(104)
                 }
 
                 PropertyChanges {
                     target: author
-                    x: -36
-                    y: 113
-                    width: 446
-                    height: 44
+                    x: scaledValue(-36)
+                    y: scaledValue(113)
+                    width: scaledValue(446)
+                    height: scaledValue(44)
                     opacity: 0
                 }
 
                 PropertyChanges {
                     target: buttonStartGame
                     opacity: 1
-                    y: 11
+                    y: scaledValue(11)
                 }
 
                 PropertyChanges {
                     target: buttonHighscores
                     opacity: 1
-                    y: 91
+                    y: scaledValue(91)
                 }
 
                 PropertyChanges {
                     target: buttonHelp
                     opacity: 1
-                    y: 171
+                    y: scaledValue(171)
                 }
 
                 PropertyChanges {
@@ -628,10 +638,10 @@ PageStackWindow {
 
                 PropertyChanges {
                     target: image1
-                    x: 53
-                    y: 13
-                    width: 374
-                    height: 104
+                    x: scaledValue(53)
+                    y: scaledValue(13)
+                    width: scaledValue(374)
+                    height: scaledValue(104)
                     fillMode: "PreserveAspectFit"
                     z: 5
                 }
@@ -691,22 +701,22 @@ PageStackWindow {
 
                 PropertyChanges {
                     target: buttonRestart
-                    y: 136
+                    y: scaledValue(136)
                 }
 
                 PropertyChanges {
                     target: buttonHighscores
-                    y: 230
+                    y: scaledValue(230)
                 }
 
                 PropertyChanges {
                     target: buttonHelp
-                    y: 310
+                    y: scaledValue(310)
                 }
 
                 PropertyChanges {
                     target: buttonResume
-                    y: 58
+                    y: scaledValue(58)
                 }
             },
             State {
@@ -746,31 +756,31 @@ PageStackWindow {
                 from: "menuState"
                 to: "gameState"
                 SequentialAnimation {
-                    ScriptAction { script: { Game.startGame(); gameTimer.running = false; } }
+                    ScriptAction { script: { Game.startGame(); gameTimer.running = false } }
                     NumberAnimation { properties: "x, y, width, height, opacity"; easing.type: Easing.InOutQuad; duration: 500 }
-                    ScriptAction { script: gameTimer.running = true; }
+                    ScriptAction { script: gameTimer.running = true }
                 }
             },
             Transition {
                 from: "gameState"
                 to: "pauseMenuState"
-                NumberAnimation { properties: "opacity"; easing.type: Easing.InOutQuad; duration: 250 }
+                NumberAnimation { properties: "y, opacity"; easing.type: Easing.InOutQuad; duration: 250 }
             },
             Transition {
                 from: "pauseMenuState"
                 to: "gameState"
                 SequentialAnimation {
-                    NumberAnimation { properties: "opacity"; easing.type: Easing.InOutQuad; duration: 250 }
-                    ScriptAction { script: gameTimer.running = true; }
+                    NumberAnimation { properties: "y, opacity"; easing.type: Easing.InOutQuad; duration: 250 }
+                    ScriptAction { script: gameTimer.running = true }
                 }
             },
             Transition {
                 from: "hiscoresEnd"
                 to: "gameState"
                 SequentialAnimation {
-                    ScriptAction { script: { Game.startGame(); gameTimer.running = false; } }
+                    ScriptAction { script: { Game.startGame(); gameTimer.running = false } }
                     NumberAnimation { properties: "opacity"; easing.type: Easing.InOutQuad; duration: 250 }
-                    ScriptAction { script: gameTimer.running = true; }
+                    ScriptAction { script: gameTimer.running = true }
                 }
             }
         ]
