@@ -332,6 +332,7 @@ var lastX = 0;
 var lastY = 0;
 var relX = 0;
 var relY = 0;
+var pressCanceled = false;
 
 function mousePressed(mouse) {
     isPanning = true;
@@ -339,11 +340,13 @@ function mousePressed(mouse) {
     relY = 0;
     lastX = mouse.x;
     lastY = mouse.y;
+    pressCanceled = false;
 }
 
 function mouseReleased() {
     /* Screen is tapped when mouse pressed, not moved and then released */
-    if (relX == 0 && relY == 0) {
+    var threshold = blockSize / 4;
+    if (!pressCanceled && Math.abs(relX) <= threshold && Math.abs(relY) <= threshold) {
         rotatePiece();
     }
 
@@ -352,6 +355,7 @@ function mouseReleased() {
     relY = 0;
     lastX = 0;
     lastY = 0;
+    pressCanceled = false;
 }
 
 function mouseMoved(mouse) {
@@ -362,14 +366,17 @@ function mouseMoved(mouse) {
         if (relX > blockSize) {
             movePiece(1);
             relX = 0;
+            pressCanceled = true;
         }
         else if (relX < -blockSize) {
             movePiece(-1);
             relX = 0;
+            pressCanceled = true;
         }
         if (relY > blockSize) {
             relY = 0;
             updateGame();
+            pressCanceled = true;
         }
 
         lastX = mouse.x;
