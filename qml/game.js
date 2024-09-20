@@ -17,6 +17,9 @@
     along with Trites.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+.import QtQuick.LocalStorage 2.0 as Sql
+.import QtQuick 2.6 as QtQuick
+
 /* Data about the game area */
 var blockSize = 18;
 var boardWidth = 10;
@@ -60,7 +63,7 @@ function newPiece() {
     var randomFile = pieceBag[bagIndex];
     var component = Qt.createComponent(randomFile);
 
-    if (component.status === Component.Ready) {
+    if (component.status === QtQuick.Component.Ready) {
         currentPiece = component.createObject(gameArea);
         currentPiece.blockSize = blockSize;
         currentPiece.pX = currentPiece.startX;
@@ -90,7 +93,7 @@ function newPiece() {
     randomFile = pieceBag[bagIndex+1];
     component = Qt.createComponent(randomFile);
 
-    if (component.status === Component.Ready) {
+    if (component.status === QtQuick.Component.Ready) {
         nextPiece = component.createObject(nextPiecePlaceholder);
         nextPiece.blockSize = window.scaledValue(24);
         if (nextPiece.startY === 0) {
@@ -385,7 +388,7 @@ function mouseMoved(mouse) {
 }
 
 function saveHighScore() {
-    var db = openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
+    var db = Sql.LocalStorage.openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
     var dataStr = "INSERT INTO Scores VALUES(?, ?)";
     var data = [nameField.text, score];
 
@@ -401,7 +404,7 @@ function saveHighScore() {
 
 function showHighScores() {
     highScoreModel.clear();
-    var db = openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
+    var db = Sql.LocalStorage.openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
     db.transaction(
         function (tx) {
                     try {
