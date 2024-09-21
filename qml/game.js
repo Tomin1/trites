@@ -174,7 +174,7 @@ function checkCollision(newX, newY, newRot) {
                 else if (newY + y >= boardHeight) {
                     return Collision.Block;
                 }
-                else if (board[index(newX + x, newY + y)] !== null) {
+                else if (board[index(newX + x, newY + y)]) {
                     return Collision.Block;
                 }
             }
