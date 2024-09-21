@@ -362,6 +362,9 @@ function mousePressed(mouse) {
 }
 
 function mouseReleased() {
+    if (!currentPiece)
+        return;
+
     /* Screen is tapped when mouse pressed, not moved and then released */
     var threshold = blockSize / 4;
     if (!pressCanceled && Math.abs(relX) <= threshold && Math.abs(relY) <= threshold) {
@@ -377,7 +380,7 @@ function mouseReleased() {
 }
 
 function mouseMoved(mouse) {
-    if (isPanning) {
+    if (currentPiece && isPanning) {
         relX += mouse.x - lastX;
         relY += mouse.y - lastY;
 
