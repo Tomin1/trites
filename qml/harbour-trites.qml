@@ -107,10 +107,10 @@ ApplicationWindow {
             }
 
             SilicaFlickable {
-                id: flickHelp
+                id: flickAbout
                 width: scaledValue(416)
                 height: scaledByHeight(563)
-                contentHeight: helpText.paintedHeight
+                contentHeight: aboutText.height
                 anchors.right: parent.right
                 anchors.rightMargin: scaledValue(32)
                 anchors.left: parent.left
@@ -119,12 +119,38 @@ ApplicationWindow {
                 anchors.topMargin: scaledByHeight(32)
                 clip: true
 
-                Label {
-                    id: helpText
+                Column {
+                    id: aboutText
+                    spacing: Theme.paddingLarge
                     width: parent.width
-                    color: "white"
-                    text: qsTr("Original consept by Alexey Pajitnov\n\nTrites is a game developed by odamite. Graphics designed by joppu\n\nTrites is open source and licenced under GPL version 3.\n\nGame data licenced under CC BY-SA.")
-                    wrapMode: Text.WordWrap
+
+                    Label {
+                        width: parent.width
+                        color: "white"
+                        text: qsTr("Original concept by Alexey Pajitnov.")
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Label {
+                        width: parent.width
+                        color: "white"
+                        text: qsTr("Trites is a game developed by odamite. Graphics designed by joppu. Sailfish port by tomin.")
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Label {
+                        width: parent.width
+                        color: "white"
+                        text: qsTr("Trites is open source and licensed under GPL version 3.")
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Label {
+                        width: parent.width
+                        color: "white"
+                        text: qsTr("Game data licensed under CC BY-SA.")
+                        wrapMode: Text.WordWrap
+                    }
                 }
 
                 VerticalScrollDecorator {}
@@ -278,20 +304,20 @@ ApplicationWindow {
                     Game.showHighScores()
                     helpContainer.x = 0
                     menuContainer.x = -Screen.width
-                    helpText.visible = false
+                    aboutText.visible = false
                     highScoreText.visible = true
                 }
             }
 
             MenuButton {
-                id: buttonHelp
+                id: buttonAbout
                 x: scaledValue(96)
                 y: Screen.height
-                label: "Help"
+                label: "About"
                 onClicked: {
                     helpContainer.x = 0
                     menuContainer.x = -Screen.width
-                    helpText.visible = true
+                    aboutText.visible = true
                     highScoreText.visible = false
                 }
             }
@@ -601,7 +627,7 @@ ApplicationWindow {
                 }
 
                 PropertyChanges {
-                    target: buttonHelp
+                    target: buttonAbout
                     opacity: 1
                     y: scaledValue(171)
                 }
@@ -710,7 +736,7 @@ ApplicationWindow {
                 }
 
                 PropertyChanges {
-                    target: buttonHelp
+                    target: buttonAbout
                     y: scaledValue(310)
                 }
 
