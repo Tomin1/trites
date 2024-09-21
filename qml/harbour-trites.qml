@@ -412,6 +412,7 @@ ApplicationWindow {
                 MouseArea {
                     id: pauseButtonArea
                     anchors.fill: parent
+                    enabled: root.state === "gameState"
                     onClicked: {
                         root.state = "pauseMenuState"
                         gameTimer.running = false
