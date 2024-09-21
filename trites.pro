@@ -5,6 +5,7 @@ CONFIG += sailfishapp_qml
 DISTFILES += qml/harbour-trites.qml \
     qml/BasePiece.qml \
     qml/Block.qml \
+    qml/Dimensions.qml \
     qml/game.js \
     qml/MenuButton.qml \
     qml/PieceI.qml \

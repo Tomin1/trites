@@ -25,13 +25,10 @@ import "game.js" as Game
 
 ApplicationWindow {
     readonly property real scalingFactor: Math.min(Screen.width / 480, Screen.height / 854)
+    readonly property Dimensions dimensions: Dimensions { }
 
     function scaledValue(value) {
         return value * scalingFactor
-    }
-
-    function scaledByHeight(value) {
-        return value * Screen.height / 854;
     }
 
     id: window
@@ -95,9 +92,9 @@ ApplicationWindow {
         Item {
             id: helpContainer
             x: Screen.width
-            y: scaledValue(130)
+            y: dimensions.containerTopMargin
             width: Screen.width
-            height: scaledByHeight(724)
+            height: dimensions.containerHeight
             z: 10
 
             Rectangle {
@@ -108,15 +105,17 @@ ApplicationWindow {
 
             SilicaFlickable {
                 id: flickAbout
-                width: scaledValue(416)
-                height: scaledByHeight(563)
+                width: dimensions.containerContentWidth
+                height: dimensions.containerHeight - dimensions.menuButtonHeight - dimensions.marginMedium
                 contentHeight: aboutText.height
-                anchors.right: parent.right
-                anchors.rightMargin: scaledValue(32)
-                anchors.left: parent.left
-                anchors.leftMargin: scaledValue(32)
-                anchors.top: parent.top
-                anchors.topMargin: scaledByHeight(32)
+                anchors {
+                    right: parent.right
+                    rightMargin: dimensions.marginMedium
+                    left: parent.left
+                    leftMargin: dimensions.marginMedium
+                    top: parent.top
+                    topMargin: dimensions.marginTop
+                }
                 clip: true
 
                 Column {
@@ -158,14 +157,16 @@ ApplicationWindow {
 
             Item {
                 id: highScoreText
-                width: scaledValue(416)
-                height: scaledByHeight(563)
-                anchors.right: parent.right
-                anchors.rightMargin: scaledValue(32)
-                anchors.left: parent.left
-                anchors.leftMargin: scaledValue(32)
-                anchors.top: parent.top
-                anchors.topMargin: scaledValue(32)
+                width: dimensions.containerContentWidth
+                height: dimensions.containerHeight - dimensions.menuButtonHeight - dimensions.marginMedium
+                anchors {
+                    right: parent.right
+                    rightMargin: dimensions.marginMedium
+                    left: parent.left
+                    leftMargin: dimensions.marginMedium
+                    top: parent.top
+                    topMargin: dimensions.marginTop
+                }
 
                 ListView {
                     anchors.fill: parent
@@ -183,7 +184,7 @@ ApplicationWindow {
                     id: noHighYet
                     anchors.fill: parent
                     text: "No highscores yet"
-                    font.pixelSize: scaledValue(32) * 1.5
+                    font.pixelSize: dimensions.placeholderFontSize
                     visible: false
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -200,8 +201,8 @@ ApplicationWindow {
             }
 
             MenuButton {
-                x: scaledValue(96)
-                y: scaledValue(628)
+                x: dimensions.buttonLeftMargin
+                y: dimensions.containerHeight - dimensions.menuButtonHeight - dimensions.marginMedium
                 label: "Back"
                 onClicked: {
                     helpContainer.x = Screen.width
@@ -220,9 +221,9 @@ ApplicationWindow {
             id: image1
             x: scaledValue(53)
             y: scaledValue(13)
-            width: scaledValue(374)
-            height: scaledValue(104)
-            sourceSize.width: scaledValue(374)
+            width: dimensions.titleLogoWidth
+            height: dimensions.titleLogoHeight
+            sourceSize.width: dimensions.titleLogoWidth
             fillMode: Image.PreserveAspectFit
             smooth: true
             source: "data/logo.svg"
@@ -251,9 +252,9 @@ ApplicationWindow {
 
         Item {
             id: menuContainer
-            y: scaledValue(130)
+            y: dimensions.containerTopMargin
             width: Screen.width
-            height: scaledValue(724)
+            height: dimensions.containerHeight
             visible: true
             z: 1
 
@@ -266,7 +267,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonStartGame
-                x: scaledValue(96)
+                x: dimensions.buttonLeftMargin
                 y: Screen.height
                 label: "Start game"
                 onClicked: {
@@ -277,7 +278,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonRestart
-                x: scaledValue(96)
+                x: dimensions.buttonLeftMargin
                 y: Screen.height
                 label: "Restart"
                 onClicked: {
@@ -289,7 +290,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonResume
-                x: scaledValue(96)
+                x: dimensions.buttonLeftMargin
                 y: Screen.height
                 label: "Resume"
                 onClicked: root.state = "gameState"
@@ -297,7 +298,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonHighscores
-                x: scaledValue(96)
+                x: dimensions.buttonLeftMargin
                 y: Screen.height
                 label: "Highscores"
                 onClicked: {
@@ -311,7 +312,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonAbout
-                x: scaledValue(96)
+                x: dimensions.buttonLeftMargin
                 y: Screen.height
                 label: "About"
                 onClicked: {
@@ -332,20 +333,20 @@ ApplicationWindow {
         Item {
             id: gameContainer
             x: 0
-            y: scaledValue(130)
+            y: dimensions.containerTopMargin
             width: Screen.width
-            height: scaledValue(724)
+            height: dimensions.containerHeight
             visible: true
 
             Text {
                 id: scoreText
-                x: scaledValue(362)
+                x: Screen.width - dimensions.sidebarWidth
                 y: scaledValue(254)
-                width: scaledValue(113)
-                height: scaledValue(66)
+                width: dimensions.sidebarWidth - dimensions.marginTiny
+                height: dimensions.sidebarRowHeight * 2
                 color: "white"
                 text: "Score:\n0"
-                font.pixelSize: scaledValue(20) * 1.5
+                font.pixelSize: dimensions.sidebarFontSize
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignRight
@@ -354,13 +355,13 @@ ApplicationWindow {
 
             Text {
                 id: nextText
-                x: scaledValue(362)
-                y: scaledValue(16)
-                width: scaledValue(113)
-                height: scaledValue(33)
+                x: Screen.width - dimensions.sidebarWidth
+                y: dimensions.marginSmall
+                width: dimensions.sidebarWidth - dimensions.marginTiny
+                height: dimensions.sidebarRowHeight
                 color: "white"
                 text: "Next:"
-                font.pixelSize: scaledValue(20) * 1.5
+                font.pixelSize: dimensions.sidebarFontSize
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignRight
@@ -369,7 +370,7 @@ ApplicationWindow {
 
             Item {
                 id: nextPiecePlaceholder
-                x: scaledValue(379)
+                x: Screen.width - dimensions.sidebarWidth + dimensions.marginSmall
                 y: scaledValue(56)
                 width: scaledValue(96)
                 height: scaledValue(108)
@@ -377,13 +378,13 @@ ApplicationWindow {
 
             Text {
                 id: levelText
-                x: scaledValue(362)
+                x: Screen.width - dimensions.sidebarWidth
                 y: scaledValue(169)
-                width: scaledValue(113)
-                height: scaledValue(66)
+                width: dimensions.sidebarWidth - dimensions.marginTiny
+                height: dimensions.sidebarRowHeight * 2
                 color: "white"
                 text: "Level:\n1"
-                font.pixelSize: scaledValue(20) * 1.5
+                font.pixelSize: dimensions.sidebarFontSize
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignRight
@@ -393,8 +394,8 @@ ApplicationWindow {
             Image {
                 id: gameArea
                 source: "data/background.png"
-                x: scaledValue(25)
-                y: scaledValue(16)
+                x: dimensions.marginLess
+                y: dimensions.marginSmall
                 width: scaledValue(347)
                 height: scaledValue(693)
                 clip: true
@@ -402,10 +403,10 @@ ApplicationWindow {
 
             Image {
                 id: pauseButton
-                x: scaledValue(397)
-                y: scaledValue(632)
-                width: scaledValue(60)
-                height: scaledValue(60)
+                x: Screen.width - dimensions.pauseButtonSize - dimensions.marginLess
+                y: dimensions.containerHeight - dimensions.pauseButtonSize - dimensions.marginMedium
+                width: dimensions.pauseButtonSize
+                height: dimensions.pauseButtonSize
                 source: pauseButtonArea.pressed ? "data/pausebutton_pressed.svg" : "data/pausebutton_unpressed.svg"
 
                 MouseArea {
@@ -430,13 +431,11 @@ ApplicationWindow {
         Rectangle {
             id: rectangle2
             x: 0
-            y: scaledValue(130)
+            y: dimensions.containerTopMargin
             width: Screen.width*2
-            height: scaledValue(724)
-            //anchors.fill: parent
+            height: dimensions.containerHeight
             color: "black"
             visible: false
-            anchors.topMargin: 130
             opacity: 0
 
             TextField {
@@ -444,28 +443,30 @@ ApplicationWindow {
                 placeholderText: "Write your name here"
                 maximumLength: 50
                 y: scaledValue(140)
-                anchors.right: parent.right
-                anchors.rightMargin: Screen.width+scaledValue(25)
-                anchors.left: parent.left
-                anchors.leftMargin: scaledValue(25)
+                anchors {
+                    right: parent.right
+                    rightMargin: Screen.width + dimensions.marginLess
+                    left: parent.left
+                    leftMargin: dimensions.marginLess
+                }
             }
 
             MenuButton {
-                x: scaledValue(95)
+                x: dimensions.buttonLeftMargin
                 y: scaledValue(210)
                 label: "Save my score"
                 onClicked: { Game.saveHighScore(); rectangle2.x = -Screen.width }
             }
 
             MenuButton {
-                x: scaledValue(95)
+                x: dimensions.buttonLeftMargin
                 y: scaledValue(290)
                 label: "No, thank you"
                 onClicked: { Game.showHighScores(); rectangle2.x = -Screen.width }
             }
 
             MenuButton {
-                x: Screen.width + scaledValue(95)
+                x: Screen.width + dimensions.buttonLeftMargin
                 y: scaledValue(636)
                 label: "Go To Menu"
                 onClicked: {
@@ -475,7 +476,7 @@ ApplicationWindow {
             }
 
             MenuButton {
-                x: Screen.width + scaledValue(95)
+                x: Screen.width + dimensions.buttonLeftMargin
                 y: scaledValue(544)
                 label: "Play Again"
                 onClicked: {
@@ -493,7 +494,7 @@ ApplicationWindow {
                 text: "Score:"
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: scaledValue(24)
+                font.pixelSize: dimensions.fontSizeSmall
             }
 
             ListView {
@@ -511,7 +512,7 @@ ApplicationWindow {
                     id: noHighYetEnd1
                     anchors.fill: parent
                     text: "No highscores yet"
-                    font.pixelSize: scaledValue(32) * 1.5
+                    font.pixelSize: dimensions.placeholderFontSize
                     visible: false
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -536,7 +537,7 @@ ApplicationWindow {
                 color: "white"
                 text: "0"
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: scaledValue(48)
+                font.pixelSize: dimensions.fontSizeBig
             }
 
             Behavior on x {
@@ -573,7 +574,7 @@ ApplicationWindow {
 
                 PropertyChanges {
                     target: author
-                    x: scaledValue(0)
+                    x: 0
                     y: scaledValue(420)
                     width: scaledValue(396)
                     height: scaledValue(50)
@@ -591,9 +592,9 @@ ApplicationWindow {
                 PropertyChanges {
                     target: menuContainer
                     x: 0
-                    y: scaledValue(130)
+                    y: dimensions.containerTopMargin
                     width: Screen.width
-                    height: scaledValue(724)
+                    height: dimensions.containerHeight
                     visible: true
                     opacity: 1
                 }
@@ -601,8 +602,8 @@ ApplicationWindow {
                 PropertyChanges {
                     target: image1
                     x: scaledValue(53)
-                    width: scaledValue(374)
-                    height: scaledValue(104)
+                    width: dimensions.titleLogoWidth
+                    height: dimensions.titleLogoHeight
                 }
 
                 PropertyChanges {
@@ -666,8 +667,8 @@ ApplicationWindow {
                     target: image1
                     x: scaledValue(53)
                     y: scaledValue(13)
-                    width: scaledValue(374)
-                    height: scaledValue(104)
+                    width: dimensions.titleLogoWidth
+                    height: dimensions.titleLogoHeight
                     fillMode: "PreserveAspectFit"
                     z: 5
                 }

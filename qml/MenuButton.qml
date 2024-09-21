@@ -21,8 +21,8 @@ import Sailfish.Silica 1.0
 import QtQuick 2.6
 
 Image {
-    width: window.scaledValue(288)
-    height: window.scaledValue(60)
+    width: dimensions.menuButtonWidth
+    height: dimensions.menuButtonHeight
     source: mousearea.pressed ? "data/menubutton_pressed.svg" : "data/menubutton_unpressed.svg"
 
     property bool bPressed: false
@@ -32,7 +32,7 @@ Image {
     Text {
         anchors.fill: parent
         text: parent.label
-        font.pixelSize: window.scaledValue(24) * 1.5
+        font.pixelSize: dimensions.menuButtonFontSize
         font.weight: Font.Bold
         color: "white"
         verticalAlignment: Text.AlignVCenter
