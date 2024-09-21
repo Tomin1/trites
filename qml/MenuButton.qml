@@ -33,6 +33,7 @@ Image {
         anchors.fill: parent
         text: parent.label
         font.pixelSize: window.scaledValue(24) * 1.5
+        font.weight: Font.Bold
         color: "white"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
