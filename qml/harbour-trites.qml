@@ -183,12 +183,12 @@ ApplicationWindow {
                 Text {
                     id: noHighYet
                     anchors.fill: parent
-                    text: "No highscores yet"
+                    text: qsTr("No highscores yet")
                     font.pixelSize: dimensions.placeholderFontSize
                     visible: false
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: "#202020"
+                    color: "#909090"
 
                     states: State {
                         when: (highScoreModel.count == 0)
@@ -511,12 +511,12 @@ ApplicationWindow {
                 Text {
                     id: noHighYetEnd1
                     anchors.fill: parent
-                    text: "No highscores yet"
+                    text: qsTr("No highscores yet")
                     font.pixelSize: dimensions.placeholderFontSize
                     visible: false
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: "#202020"
+                    color: "#909090"
 
                     states: State {
                         when: (highScoreModel.count == 0)
