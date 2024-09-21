@@ -105,6 +105,9 @@ function newPiece() {
         }
         nextPiece.anchors.right = nextPiecePlaceholder.right;
     }
+
+    isPanning = false;
+    pressCanceled = true;
 }
 
 function startGame() {
