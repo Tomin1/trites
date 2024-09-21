@@ -35,6 +35,7 @@ var pieceBag = [ "PieceL.qml", "PieceT.qml", "PieceO.qml", "PieceJ.qml",
 var componentBlock = Qt.createComponent("Block.qml");
 var currentPiece;
 var nextPiece;
+var finalPiece;
 
 var level = 1;
 var score = 0;
@@ -73,10 +74,13 @@ function newPiece() {
 
         var col = checkCollision(currentPiece.pX, currentPiece.pY, currentPiece.pRot);
         if (col === Collision.Block) {
+            finalPiece = currentPiece;
+            currentPiece = undefined;
             root.state = "hiscoresEnd";
             textFinalScore.text = score;
             rectangle2.x = 0;
             nameField.focus = true;
+            return;
         }
     }
 
@@ -106,6 +110,11 @@ function newPiece() {
 function startGame() {
     blockSize = gameArea.height / boardHeight;
     console.log("block:", blockSize);
+
+    if (finalPiece) {
+        finalPiece.destroy();
+        finalPiece = undefined;
+    }
 
     score = 0;
     level = 1;
@@ -175,6 +184,9 @@ function checkCollision(newX, newY, newRot) {
 
 /* Update the game */
 function updateGame() {
+    if (!currentPiece)
+        return;
+
     /* Check is there collision on next position of the piece (one down) */
     var col = checkCollision(currentPiece.pX, currentPiece.pY+1, currentPiece.pRot);
 
@@ -227,7 +239,7 @@ function rotatePiece() {
 
 /* Move piece left or right if walls aren't blocking */
 function movePiece(dir) {
-    if (checkCollision(currentPiece.pX + dir, currentPiece.pY, currentPiece.pRot) === Collision.None)
+    if (currentPiece && checkCollision(currentPiece.pX + dir, currentPiece.pY, currentPiece.pRot) === Collision.None)
         currentPiece.pX += dir;
 }
 
