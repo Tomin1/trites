@@ -813,4 +813,15 @@ ApplicationWindow {
             }
         ]
     }
+    cover: Component {
+        CoverBackground {
+            CoverPlaceholder {
+                icon {
+                    source: Qt.resolvedUrl("../harbour-trites.svg")
+                    sourceSize: Qt.size(Theme.iconSizeLauncher, Theme.iconSizeLauncher)
+                }
+                text: "Trites"
+            }
+        }
+    }
 }
