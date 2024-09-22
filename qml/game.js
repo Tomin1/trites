@@ -409,32 +409,40 @@ function saveHighScore() {
     var db = Sql.LocalStorage.openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
     var dataStr = "INSERT INTO Scores VALUES(?, ?)";
     var data = [nameField.text, score];
+    var rowId = -1;
 
     db.transaction(
         function (tx) {
             tx.executeSql('CREATE TABLE IF NOT EXISTS Scores(name TEXT, score NUMBER)');
-            tx.executeSql(dataStr, data);
+            var result = tx.executeSql(dataStr, data);
+            rowId = result.insertId;
         }
     );
 
-    showHighScores();
+    showHighScores(rowId);
 }
 
-function showHighScores() {
+function showHighScores(insertedRowId) {
     highScoreModel.clear();
     var db = Sql.LocalStorage.openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
     db.transaction(
         function (tx) {
-                    try {
-            var hst = tx.executeSql('SELECT * FROM Scores ORDER BY score desc LIMIT 10');
-            var hstxt = "";
-            for(var i = 0; i < hst.rows.length; i++) {
-                highScoreModel.append({"index": i+1, "player": hst.rows.item(i).name, "score": hst.rows.item(i).score});
+            try {
+                var hst = tx.executeSql('SELECT * FROM Scores ORDER BY score desc LIMIT 10');
+                var hstxt = "";
+                for (var i = 0; i < hst.rows.length; i++) {
+                    var item = hst.rows.item(i);
+                    highScoreModel.append({
+                        "index": i+1,
+                        "player": item.name,
+                        "score": item.score,
+                        "inserted": item.rowId === insertedRowId
+                    });
+                }
             }
-                    }
-                    catch (e) {
-                       console.debug("SHIT HAPPENS: " + e);
-                    }
+            catch (e) {
+               console.debug("SHIT HAPPENS: " + e);
+            }
         }
     );
 }

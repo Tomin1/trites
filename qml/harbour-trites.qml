@@ -527,6 +527,7 @@ ApplicationWindow {
                 model: highScoreModel
                 delegate: Label {
                     color: "white"
+                    font.weight: inserted ? Font.Bold : Font.Normal
                     text: index + ". " + player + " - " + score
                 }
 
