@@ -463,6 +463,7 @@ ApplicationWindow {
                     horizontalCenter: parent.horizontalCenter
                     horizontalCenterOffset: -Screen.width / 2
                 }
+                enabled: nameField.text.length > 0
                 y: scaledValue(210)
                 label: "Save my score"
                 onClicked: { Game.saveHighScore(); rectangle2.x = -Screen.width }

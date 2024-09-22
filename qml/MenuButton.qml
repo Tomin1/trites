@@ -25,6 +25,7 @@ Image {
     height: dimensions.menuButtonHeight
     source: mousearea.pressed ? "data/menubutton_pressed.svg" : "data/menubutton_unpressed.svg"
 
+    property alias enabled: mousearea.enabled
     property bool bPressed: false
     property string label: "Button"
     signal clicked
@@ -34,7 +35,7 @@ Image {
         text: parent.label
         font.pixelSize: dimensions.menuButtonFontSize
         font.weight: Font.Bold
-        color: "white"
+        color: mousearea.enabled ? "white" : "lightgrey"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
     }
