@@ -219,7 +219,7 @@ ApplicationWindow {
 
         Image {
             id: image1
-            x: scaledValue(53)
+            anchors.horizontalCenter: parent.horizontalCenter
             y: scaledValue(13)
             width: dimensions.titleLogoWidth
             height: dimensions.titleLogoHeight
@@ -231,7 +231,10 @@ ApplicationWindow {
             SequentialAnimation {
                 id: stupidAnimation
                 running: true
-                NumberAnimation { target: image1; property: "opacity"; from: 0.0; to: 1.0; duration: 1000 }
+                ParallelAnimation {
+                    NumberAnimation { target: image1; property: "opacity"; from: 0.0; to: 1.0; duration: 1000 }
+                    NumberAnimation { target: image1; property: "y"; from: Screen.height; to: scaledValue(13); duration: 1000 }
+                }
                 NumberAnimation { target: author; property: "opacity"; from: 0.0; to: 1.0; duration: 1000 }
                 ScriptAction { script: mousearea1.enabled = true }
                 PauseAnimation { duration: 5000 }
@@ -241,7 +244,7 @@ ApplicationWindow {
             Image {
                 source: "data/author.svg"
                 id: author
-                x: 0
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: scaledValue(489)
                 width: scaledValue(446)
                 height: scaledValue(74)
@@ -589,16 +592,14 @@ ApplicationWindow {
                 PropertyChanges {
                     target: image1
                     x: scaledValue(42)
-                    y: scaledValue(13)
                     width: scaledValue(396)
-                    height: scaledValue(719)
+                    height: Screen.height - dimensions.marginMedium - dimensions.titleLogoHeight
                     opacity: 1
                 }
 
                 PropertyChanges {
                     target: author
-                    x: 0
-                    y: scaledValue(420)
+                    y: Screen.height / 2
                     width: scaledValue(396)
                     height: scaledValue(50)
                     opacity: 0
