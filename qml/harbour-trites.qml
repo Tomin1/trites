@@ -265,61 +265,67 @@ ApplicationWindow {
                 opacity: 0
             }
 
-            MenuButton {
-                id: buttonStartGame
-                anchors.horizontalCenter: parent.horizontalCenter
+            Column {
+                property bool isPauseMenu
+                id: menuButtons
+                spacing: dimensions.marginLess
+                width: parent.width
                 y: Screen.height
-                label: "Start game"
-                onClicked: {
-                    stupidAnimation.stop()
-                    root.state = "gameState"
+
+                MenuButton {
+                    id: buttonStartGame
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    label: "Start game"
+                    visible: !menuButtons.isPauseMenu
+                    onClicked: {
+                        stupidAnimation.stop()
+                        root.state = "gameState"
+                    }
                 }
-            }
 
-            MenuButton {
-                id: buttonRestart
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: Screen.height
-                label: "Restart"
-                onClicked: {
-                    Game.startGame()
-                    gameTimer.running = false
-                    root.state = "gameState"
+                MenuButton {
+                    id: buttonResume
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    label: "Resume"
+                    visible: menuButtons.isPauseMenu
+                    onClicked: root.state = "gameState"
                 }
-            }
 
-            MenuButton {
-                id: buttonResume
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: Screen.height
-                label: "Resume"
-                onClicked: root.state = "gameState"
-            }
-
-            MenuButton {
-                id: buttonHighscores
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: Screen.height
-                label: "Highscores"
-                onClicked: {
-                    Game.showHighScores()
-                    helpContainer.x = 0
-                    menuContainer.x = -Screen.width
-                    aboutText.visible = false
-                    highScoreText.visible = true
+                MenuButton {
+                    id: buttonRestart
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    label: "Restart"
+                    visible: menuButtons.isPauseMenu
+                    onClicked: {
+                        Game.startGame()
+                        gameTimer.running = false
+                        root.state = "gameState"
+                    }
                 }
-            }
 
-            MenuButton {
-                id: buttonAbout
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: Screen.height
-                label: "About"
-                onClicked: {
-                    helpContainer.x = 0
-                    menuContainer.x = -Screen.width
-                    aboutText.visible = true
-                    highScoreText.visible = false
+                MenuButton {
+                    id: buttonHighscores
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    label: "Highscores"
+                    onClicked: {
+                        Game.showHighScores()
+                        helpContainer.x = 0
+                        menuContainer.x = -Screen.width
+                        aboutText.visible = false
+                        highScoreText.visible = true
+                    }
+                }
+
+                MenuButton {
+                    id: buttonAbout
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    label: "About"
+                    onClicked: {
+                        helpContainer.x = 0
+                        menuContainer.x = -Screen.width
+                        aboutText.visible = true
+                        highScoreText.visible = false
+                    }
                 }
             }
 
@@ -629,21 +635,15 @@ ApplicationWindow {
                 }
 
                 PropertyChanges {
-                    target: buttonStartGame
+                    target: menuButtons
                     opacity: 1
-                    y: scaledValue(11)
+                    y: dimensions.containerTopMargin
                 }
 
                 PropertyChanges {
-                    target: buttonHighscores
-                    opacity: 1
-                    y: scaledValue(91)
-                }
-
-                PropertyChanges {
-                    target: buttonAbout
-                    opacity: 1
-                    y: scaledValue(171)
+                    target: menuButtons
+                    restoreEntryValues: false
+                    isPauseMenu: false
                 }
 
                 PropertyChanges {
@@ -735,28 +735,14 @@ ApplicationWindow {
                 }
 
                 PropertyChanges {
-                    target: buttonStartGame
-                    visible: false
+                    target: menuButtons
+                    y: dimensions.containerTopMargin
                 }
 
                 PropertyChanges {
-                    target: buttonRestart
-                    y: scaledValue(136)
-                }
-
-                PropertyChanges {
-                    target: buttonHighscores
-                    y: scaledValue(230)
-                }
-
-                PropertyChanges {
-                    target: buttonAbout
-                    y: scaledValue(310)
-                }
-
-                PropertyChanges {
-                    target: buttonResume
-                    y: scaledValue(58)
+                    target: menuButtons
+                    restoreEntryValues: false
+                    isPauseMenu: true
                 }
             },
             State {
