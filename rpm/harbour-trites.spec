@@ -1,10 +1,10 @@
 Name:       harbour-trites
-Summary:    Trites
-Version:    0.1.0
+Summary:    Trites is remake of one of the best games ever made
+Version:    1.0.0
 Release:    1
 License:    GPLv3+
 BuildArch:  noarch
-URL:        http://example.org/
+URL:        https://github.com/Tomin1/trites/
 Source0:    %{name}-%{version}.tar.bz2
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   libsailfishapp-launcher
@@ -17,7 +17,8 @@ BuildRequires:  librsvg-tools
 BuildRequires:  qt5-qttools-linguist
 
 %description
-%{summary}.
+%{summary}. The original concept was developed by Alexey Pajitnov and released
+%under name Tetris.
 
 %prep
 %autosetup -n %{name}-%{version}
@@ -30,7 +31,8 @@ BuildRequires:  qt5-qttools-linguist
 %install
 %qmake5_install
 
-desktop-file-install --delete-original --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/%{name}.desktop
+desktop-file-install --delete-original --dir %{buildroot}%{_datadir}/applications \
+                     %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 %files
 %defattr(-,root,root,-)
