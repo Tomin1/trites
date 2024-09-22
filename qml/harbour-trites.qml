@@ -448,6 +448,7 @@ ApplicationWindow {
             TextField {
                 id: nameField
                 placeholderText: "Write your name here"
+                text: Game.getLastEnteredName()
                 maximumLength: 50
                 y: scaledValue(140)
                 anchors {

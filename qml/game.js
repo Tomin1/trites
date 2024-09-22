@@ -438,3 +438,21 @@ function showHighScores() {
         }
     );
 }
+
+function getLastEnteredName() {
+    var db = Sql.LocalStorage.openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
+    var name = "";
+    db.transaction(
+        function (tx) {
+            try {
+                var hst = tx.executeSql('SELECT name FROM Scores ORDER BY rowid DESC LIMIT 1');
+                if (hst.rows.length > 0) {
+                    name = hst.rows.item(0).name;
+                }
+            } catch (e) {
+                // Who cares?
+            }
+        }
+    );
+    return name;
+}
