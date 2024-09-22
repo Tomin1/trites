@@ -35,6 +35,7 @@ Item {
 
     readonly property int placeholderFontSize: scalingFactor * 48
 
+    readonly property int marginLarge: scalingFactor * 50
     readonly property int marginLess: scalingFactor * 25
     readonly property int marginMedium: scalingFactor * 32
     readonly property int marginSmall: scalingFactor * 16

@@ -161,11 +161,11 @@ ApplicationWindow {
                 height: dimensions.containerHeight - dimensions.menuButtonHeight - dimensions.marginMedium
                 anchors {
                     right: parent.right
-                    rightMargin: dimensions.marginMedium
+                    rightMargin: dimensions.marginLarge
                     left: parent.left
-                    leftMargin: dimensions.marginMedium
+                    leftMargin: dimensions.marginLarge
                     top: parent.top
-                    topMargin: dimensions.marginTop
+                    topMargin: dimensions.marginLarge
                 }
 
                 ListView {
@@ -517,8 +517,9 @@ ApplicationWindow {
             }
 
             ListView {
-                x: Screen.width+scaledValue(50)
-                width: Screen.width-scaledValue(100)
+                x: Screen.width + dimensions.marginLarge
+                y: dimensions.marginLarge
+                width: Screen.width - 2 * dimensions.marginLarge
                 height: scaledValue(500)
                 clip: true
                 model: highScoreModel
