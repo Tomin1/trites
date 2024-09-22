@@ -79,7 +79,7 @@ function newPiece() {
             root.state = "hiscoresEnd";
             textFinalScore.text = score;
             rectangle2.x = 0;
-            nameField.focus = true;
+            nameField.forceActiveFocus();
         }
     }
 
