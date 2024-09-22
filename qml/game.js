@@ -20,6 +20,8 @@
 .import QtQuick.LocalStorage 2.0 as Sql
 .import QtQuick 2.6 as QtQuick
 
+var debug = false;
+
 /* Data about the game area */
 var blockSize = 18;
 var boardWidth = 10;
@@ -89,7 +91,7 @@ function newPiece() {
 
     if (bagIndex+1 > 6) {
         pieceBag.sort(function() { return Math.random() - 0.5; });
-        console.log("New bag:", pieceBag);
+        if (debug) console.log("New bag:", pieceBag);
         bagIndex = 0;
     }
 
@@ -111,7 +113,7 @@ function newPiece() {
 
 function startGame() {
     blockSize = gameArea.height / boardHeight;
-    console.log("block:", blockSize);
+    if (debug) console.log("block:", blockSize);
 
     if (finalPiece) {
         finalPiece.destroy();
@@ -306,7 +308,7 @@ function checkFullRows() {
 
     /* Go thought the array of "rows to be removed" and delete them */
     for (var i = 0; i < removeRows.length; i++) {
-        console.log("Remove row", removeRows[i]);
+        if (debug) console.log("Remove row", removeRows[i]);
         removeRow(removeRows[i]);
     }
 
