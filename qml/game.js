@@ -419,29 +419,43 @@ function saveHighScore() {
         }
     );
 
-    showHighScores(rowId);
+    showHighScores(rowId, data);
 }
 
-function showHighScores(insertedRowId) {
+function showHighScores(insertedRowId, data) {
     highScoreModel.clear();
     var db = Sql.LocalStorage.openDatabaseSync("TritesHighScores", "1.0", "Trites High Scores", 100);
     db.transaction(
         function (tx) {
             try {
-                var hst = tx.executeSql('SELECT * FROM Scores ORDER BY score desc LIMIT 10');
-                var hstxt = "";
+                var found = false;
+                var hst = tx.executeSql('SELECT name,score,rowid FROM Scores ORDER BY score desc LIMIT 10');
                 for (var i = 0; i < hst.rows.length; i++) {
                     var item = hst.rows.item(i);
+                    if (String(item.rowid) === insertedRowId) {
+                        found = true;
+                    }
                     highScoreModel.append({
                         "index": i+1,
                         "player": item.name,
                         "score": item.score,
-                        "inserted": item.rowId === insertedRowId
+                        "inserted": String(item.rowid) === insertedRowId
                     });
+                }
+                if (data !== undefined && !found) {
+                    hst = tx.executeSql('SELECT COUNT(*) as count FROM Scores WHERE score >= ?', [data[1]]);
+                    if (hst.rows.length > 0) {
+                        highScoreModel.append({
+                            "index": hst.rows.item(0).count,
+                            "player": data[0],
+                            "score": data[1],
+                            "inserted": true
+                        });
+                    }
                 }
             }
             catch (e) {
-               console.debug("SHIT HAPPENS: " + e);
+               // This is fine
             }
         }
     );
