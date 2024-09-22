@@ -80,7 +80,6 @@ function newPiece() {
             textFinalScore.text = score;
             rectangle2.x = 0;
             nameField.focus = true;
-            return;
         }
     }
 
