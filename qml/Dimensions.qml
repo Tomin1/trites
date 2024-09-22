@@ -22,8 +22,6 @@ import QtQuick 2.6
 Item {
     readonly property real scalingFactor: Math.min(Screen.width / 480, Screen.height / 854)
 
-    readonly property int buttonLeftMargin: scalingFactor * 96
-
     readonly property int containerContentWidth: scalingFactor * 416
     readonly property int containerHeight: scalingFactor * 724
     readonly property int containerTopMargin: scalingFactor * 130

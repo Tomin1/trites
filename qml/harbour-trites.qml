@@ -201,7 +201,7 @@ ApplicationWindow {
             }
 
             MenuButton {
-                x: dimensions.buttonLeftMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: dimensions.containerHeight - dimensions.menuButtonHeight - dimensions.marginMedium
                 label: "Back"
                 onClicked: {
@@ -267,7 +267,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonStartGame
-                x: dimensions.buttonLeftMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: Screen.height
                 label: "Start game"
                 onClicked: {
@@ -278,7 +278,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonRestart
-                x: dimensions.buttonLeftMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: Screen.height
                 label: "Restart"
                 onClicked: {
@@ -290,7 +290,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonResume
-                x: dimensions.buttonLeftMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: Screen.height
                 label: "Resume"
                 onClicked: root.state = "gameState"
@@ -298,7 +298,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonHighscores
-                x: dimensions.buttonLeftMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: Screen.height
                 label: "Highscores"
                 onClicked: {
@@ -312,7 +312,7 @@ ApplicationWindow {
 
             MenuButton {
                 id: buttonAbout
-                x: dimensions.buttonLeftMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 y: Screen.height
                 label: "About"
                 onClicked: {
@@ -453,21 +453,30 @@ ApplicationWindow {
             }
 
             MenuButton {
-                x: dimensions.buttonLeftMargin
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    horizontalCenterOffset: -Screen.width / 2
+                }
                 y: scaledValue(210)
                 label: "Save my score"
                 onClicked: { Game.saveHighScore(); rectangle2.x = -Screen.width }
             }
 
             MenuButton {
-                x: dimensions.buttonLeftMargin
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    horizontalCenterOffset: -Screen.width / 2
+                }
                 y: scaledValue(290)
                 label: "No, thank you"
                 onClicked: { Game.showHighScores(); rectangle2.x = -Screen.width }
             }
 
             MenuButton {
-                x: Screen.width + dimensions.buttonLeftMargin
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    horizontalCenterOffset: Screen.width / 2
+                }
                 y: scaledValue(636)
                 label: "Go To Menu"
                 onClicked: {
@@ -477,7 +486,10 @@ ApplicationWindow {
             }
 
             MenuButton {
-                x: Screen.width + dimensions.buttonLeftMargin
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    horizontalCenterOffset: Screen.width / 2
+                }
                 y: scaledValue(544)
                 label: "Play Again"
                 onClicked: {
