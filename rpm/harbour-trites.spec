@@ -16,6 +16,8 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  librsvg-tools
 BuildRequires:  qt5-qttools-linguist
 
+%define _binary_payload w6.xzdio
+
 %description
 %{summary}. The original concept was developed by Alexey Pajitnov and released
 %under name Tetris.
