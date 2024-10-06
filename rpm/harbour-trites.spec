@@ -1,6 +1,6 @@
 Name:       harbour-trites
 Summary:    Trites is remake of one of the best games ever made
-Version:    1.0.0
+Version:    1.0.1
 Release:    1
 License:    GPLv3+
 BuildArch:  noarch
