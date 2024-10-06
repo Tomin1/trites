@@ -665,7 +665,7 @@ ApplicationWindow {
                 PropertyChanges {
                     target: rectangle2
                     opacity: 0
-                    visible: true
+                    visible: false
                 }
             },
             State {
