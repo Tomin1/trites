@@ -372,6 +372,9 @@ function mouseReleased() {
         rotatePiece();
     }
 
+    currentPiece.resistX = 0;
+    currentPiece.resistY = 0;
+
     isPanning = false;
     relX = 0;
     relY = 0;
@@ -385,20 +388,33 @@ function mouseMoved(mouse) {
         relX += mouse.x - lastX;
         relY += mouse.y - lastY;
 
-        if (relX > blockSize) {
+        // Required block drag distance
+        var blockDragDistance = blockSize * Math.max(Math.min(currentPiece.resistX, 2), 1);
+        if (relX > blockDragDistance) {
             movePiece(1);
             relX = 0;
             pressCanceled = true;
+            if (currentPiece.resistX === 0) {
+                currentPiece.resistY += 1;
+            }
         }
-        else if (relX < -blockSize) {
+        else if (relX < -blockDragDistance) {
             movePiece(-1);
             relX = 0;
             pressCanceled = true;
+            if (currentPiece.resistX === 0) {
+                currentPiece.resistY -= 1;
+            }
         }
-        if (relY > blockSize) {
+        // Separate distance for Y direction
+        blockDragDistance = blockSize * Math.max(Math.min(Math.abs(currentPiece.resistY), 2), 1);
+        if (relY > blockDragDistance) {
             relY = 0;
             updateGame();
             pressCanceled = true;
+            if (currentPiece.resistY === 0) {
+                currentPiece.resistX += 1;
+            }
         }
 
         lastX = mouse.x;

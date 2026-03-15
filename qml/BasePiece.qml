@@ -45,6 +45,9 @@ Item {
     property int startX
     property int startY
 
+    property int resistX
+    property int resistY
+
     property int animLength: 200
 
     /* Handle pieces position in grid (nicer code) */
